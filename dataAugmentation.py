@@ -54,7 +54,7 @@ def get_affected_nodes(graph, target_node, node_selection_strategy):
 
     if (node_selection_strategy == "random"):
         affected_nodes, _ = extract_level_n_nodes_and_edges(
-            graph, target_node, 2)
+            graph, target_node, 3)
 
     if (node_selection_strategy == "one_hop_neighbors"):
         affected_nodes, _ = extract_level_n_nodes_and_edges(

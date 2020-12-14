@@ -153,6 +153,10 @@ optimizer = optimizers.Adam(lr=1e-2)
 validation_history = []
 
 
+# Keep track of all the parallel universes.
+parallel_universe_history = []
+
+
 start_time = time.time()
 
 # Training
@@ -199,6 +203,8 @@ for epoch in range(args.epochs):
 
             log(f"Ran {count} parallel universes")
 
+            parallel_universe_history.append(count)
+
             p_u_overall_output = tf.convert_to_tensor(p_u_overall_output)
 
             # Consistency Loss is 1 / |v | of the Killback-leibler divergence
@@ -234,4 +240,16 @@ test_loss, test_acc, _ = model(
 end_time = time.time()
 
 log(f"TEST_LOSS,TEST_ACCURACY,TOTAL_TIME")
-print(f"{float(test_loss)},{float(test_acc)},{float(end_time-start_time)}")
+
+result = f"{float(test_loss)},{float(test_acc)},{float(end_time-start_time)}"
+
+if (args.nodeaug):
+    parallel_universe_avg = np.average(parallel_universe_history)
+    result += f",{float(parallel_universe_avg)}"
+
+
+print(result)
+
+if (args.file_path != ""):
+    with open(args.file_path, 'w') as output:
+        output.write(result)
